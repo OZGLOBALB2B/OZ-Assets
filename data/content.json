@@ -446,6 +446,22 @@
       "file": "assets/resources/OZ_new_Template_presentation_2026.pptx",
       "ext": "PPTX",
       "bytes": 18772505
+    },
+    {
+      "cat": {
+        "he": "עיצוב באנרים / בלוג",
+        "en": " Design Banners / Blogs"
+      },
+      "title": {
+        "he": "",
+        "en": ""
+      },
+      "desc": {
+        "he": "",
+        "en": ""
+      },
+      "ext": "Figam",
+      "url": "https://www.figma.com/design/LctyMerRUB9EPy8jkGx58k/Blog-Banners?node-id=4007-2&t=xZwckmNYRQ1XJ31t-1"
     }
   ],
   "copy": {
