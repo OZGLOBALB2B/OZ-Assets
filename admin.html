@@ -337,14 +337,32 @@ function renderColors(){
 }
 
 /* ---------- resources (with file upload) ---------- */
-function fileRow(r,i){
+function resRow(r,i){
+  const isLink=!!r.url;
   const cur=r.file?`<span class="cur">${r.file.split("/").pop()}</span>`:`<span class="cur" style="color:var(--bad)">אין קובץ עדיין</span>`;
+  const fileUI=`
+    <label>קובץ</label>
+    <div class="filebox">
+      ${cur}
+      <span class="new" data-newlabel="${i}"></span>
+      <label class="btn sm ghost" style="margin:0;cursor:pointer">בחירת קובץ<input type="file" data-rfile="${i}" hidden></label>
+    </div>`;
+  const linkUI=`
+    <div class="row2">
+      <div><label>כתובת URL</label><input type="text" dir="ltr" data-r="${i}.url" placeholder="https://www.figma.com/…"></div>
+      <div><label>תווית (למשל Figma / Drive)</label><input type="text" dir="ltr" data-r="${i}.ext" placeholder="LINK"></div>
+    </div>`;
   return `
   <div class="item">
     <button class="btn sm danger del" data-rdel="${i}">מחיקה</button>
+    <label>סוג החומר</label>
+    <select data-rkind="${i}">
+      <option value="file" ${!isLink?"selected":""}>קובץ להורדה</option>
+      <option value="link" ${isLink?"selected":""}>לינק (פיגמה / מערכת חיצונית)</option>
+    </select>
     <div class="row2">
-      <div><label>קטגוריה (עברית)</label><input type="text" data-r="${i}.cat.he" placeholder="תבניות"></div>
-      <div><label>קטגוריה (אנגלית)</label><input type="text" dir="ltr" data-r="${i}.cat.en" placeholder="Templates"></div>
+      <div><label>קטגוריה (עברית)</label><input type="text" data-r="${i}.cat.he" placeholder="עיצוב"></div>
+      <div><label>קטגוריה (אנגלית)</label><input type="text" dir="ltr" data-r="${i}.cat.en" placeholder="Design"></div>
     </div>
     <div class="row2">
       <div><label>כותרת (עברית)</label><input type="text" data-r="${i}.title.he"></div>
@@ -354,20 +372,21 @@ function fileRow(r,i){
       <div><label>תיאור (עברית)</label><textarea data-r="${i}.desc.he"></textarea></div>
       <div><label>תיאור (אנגלית)</label><textarea dir="ltr" data-r="${i}.desc.en"></textarea></div>
     </div>
-    <label>קובץ</label>
-    <div class="filebox">
-      ${cur}
-      <span class="new" data-newlabel="${i}"></span>
-      <label class="btn sm ghost" style="margin:0;cursor:pointer">בחירת קובץ<input type="file" data-rfile="${i}" hidden></label>
-    </div>
+    ${isLink?linkUI:fileUI}
   </div>`;
 }
 function renderResources(){
-  const box=$("#res-list"); box.innerHTML=(DATA.resources||[]).map((r,i)=>fileRow(r,i)).join("");
+  const box=$("#res-list"); box.innerHTML=(DATA.resources||[]).map((r,i)=>resRow(r,i)).join("");
   box.querySelectorAll("[data-r]").forEach(el=>{
     const [i,...rest]=el.dataset.r.split("."); const path=rest.join(".");
     el.value=get(DATA.resources[i],path)??"";
     el.oninput=()=>set(DATA.resources[i],path,el.value);
+  });
+  box.querySelectorAll("[data-rkind]").forEach(sel=>sel.onchange=()=>{
+    const i=+sel.dataset.rkind, r=DATA.resources[i];
+    if(sel.value==="link"){ delete r.file; delete r.bytes; if(r.url==null) r.url=""; if(!r.ext) r.ext=""; }
+    else { delete r.url; if(!r.file){ r.ext=""; } }
+    renderResources();
   });
   box.querySelectorAll("[data-rdel]").forEach(b=>b.onclick=()=>{ DATA.resources.splice(+b.dataset.rdel,1); renderResources(); });
   box.querySelectorAll("[data-rfile]").forEach(inp=>inp.onchange=async e=>{
