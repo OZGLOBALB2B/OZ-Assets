@@ -429,6 +429,23 @@
       "file": "assets/logo/OZ-logo-global-cmyk.ai",
       "ext": "AI",
       "bytes": 1436676
+    },
+    {
+      "cat": {
+        "he": "טמפלייט פאורפוינט",
+        "en": "Powerpoint Template"
+      },
+      "title": {
+        "he": "מצגת טמפלייט אנגלית 2026",
+        "en": "Presentation Template English 2026"
+      },
+      "desc": {
+        "he": "",
+        "en": ""
+      },
+      "file": "assets/resources/OZ_new_Template_presentation_2026.pptx",
+      "ext": "PPTX",
+      "bytes": 18772505
     }
   ],
   "copy": {
