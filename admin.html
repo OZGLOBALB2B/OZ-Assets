@@ -338,7 +338,7 @@ function renderColors(){
 
 /* ---------- resources (with file upload) ---------- */
 function resRow(r,i){
-  const isLink=!!r.url;
+  const isLink = r.url != null;   // link = the url field exists (even if still empty)
   const cur=r.file?`<span class="cur">${r.file.split("/").pop()}</span>`:`<span class="cur" style="color:var(--bad)">אין קובץ עדיין</span>`;
   const fileUI=`
     <label>קובץ</label>
@@ -348,10 +348,10 @@ function resRow(r,i){
       <label class="btn sm ghost" style="margin:0;cursor:pointer">בחירת קובץ<input type="file" data-rfile="${i}" hidden></label>
     </div>`;
   const linkUI=`
-    <div class="row2">
-      <div><label>כתובת URL</label><input type="text" dir="ltr" data-r="${i}.url" placeholder="https://www.figma.com/…"></div>
-      <div><label>תווית (למשל Figma / Drive)</label><input type="text" dir="ltr" data-r="${i}.ext" placeholder="LINK"></div>
-    </div>`;
+    <label>🔗 כתובת הלינק (URL)</label>
+    <input type="text" dir="ltr" data-r="${i}.url" placeholder="https://www.figma.com/file/…" style="border-color:var(--accent)">
+    <label>תווית לכפתור <span style="color:var(--ink3);font-weight:400">(למשל Figma / Drive · ברירת מחדל: LINK)</span></label>
+    <input type="text" dir="ltr" data-r="${i}.ext" placeholder="Figma">`;
   return `
   <div class="item">
     <button class="btn sm danger del" data-rdel="${i}">מחיקה</button>
