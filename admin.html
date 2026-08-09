@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>פאנל ניהול · נכסי מותג OZ</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<style>
+@font-face{font-family:"Ploni";src:url("assets/fonts/ploni-400.woff2") format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Ploni";src:url("assets/fonts/ploni-500.woff2") format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:"Ploni";src:url("assets/fonts/ploni-700.woff2") format("woff2");font-weight:700;font-display:swap}
+@font-face{font-family:"Ploni";src:url("assets/fonts/ploni-900.woff2") format("woff2");font-weight:900;font-display:swap}
+:root{--accent:#83D429;--ink:#0F0156;--ink2:#3a3560;--ink3:#8a86a6;--surface:#F5F5F2;--card:#fff;--line:#E4E3EC;--r:12px;--bad:#E02040;--ok:#1a9d54}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--ink);font-family:"Ploni",sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px}
+header{background:var(--ink);color:#fff;padding:16px 0;position:sticky;top:0;z-index:20}
+header .wrap{display:flex;align-items:center;gap:14px}
+header .logo{height:34px;display:flex}header .logo svg{height:100%;width:auto;display:block}
+header h1{font-size:17px;margin:0;font-weight:700}
+header .sp{margin-inline-start:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+a.plain{color:#fff;font-size:13px;opacity:.85;text-decoration:none}a.plain:hover{opacity:1}
+.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:100px;padding:9px 18px;font:inherit;font-weight:700;cursor:pointer;display:inline-flex;gap:7px;align-items:center}
+.btn.acc{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.sm{padding:6px 13px;font-size:13px;font-weight:500}
+.btn.danger{background:#fff;color:var(--bad);border-color:#f0c2cc}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+main{padding:26px 0 90px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:22px 0 20px}
+.tabs button{border:1px solid var(--line);background:var(--card);border-radius:100px;padding:8px 16px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink2)}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:700}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:16px}
+.card h3{margin:0 0 4px;font-size:16px;font-weight:700}
+.card .hint{margin:0 0 16px;font-size:13px;color:var(--ink3)}
+label{display:block;font-size:12.5px;font-weight:500;color:var(--ink2);margin:12px 0 5px}
+input[type=text],input[type=password],textarea,select{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px 11px;font:inherit;font-size:14px;background:#fff;color:var(--ink)}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+textarea{min-height:64px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+@media(max-width:640px){.row2,.row3{grid-template-columns:1fr}}
+.bil{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:640px){.bil{grid-template-columns:1fr}}
+.lang-badge{font-size:10px;font-family:ui-monospace,monospace;color:var(--ink3);border:1px solid var(--line);border-radius:4px;padding:1px 5px;margin-inline-start:6px}
+.item{border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:12px;position:relative;background:#fff}
+.item .del{position:absolute;inset-inline-end:12px;top:12px}
+.swatchmini{display:inline-block;width:16px;height:16px;border-radius:4px;border:1px solid var(--line);vertical-align:middle;margin-inline-end:6px}
+.filebox{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:6px;padding:11px;border:1px dashed var(--line);border-radius:9px;background:var(--surface)}
+.filebox .cur{font-size:12.5px;color:var(--ink2);font-family:ui-monospace,monospace;direction:ltr}
+.filebox .new{font-size:12px;color:var(--ok);font-weight:700}
+.status{position:fixed;inset-inline:0;bottom:0;background:var(--ink);color:#fff;padding:12px 20px;font-size:14px;display:none;z-index:40}
+.status.show{display:block}
+.status.err{background:var(--bad)}.status.ok{background:var(--ok)}
+.log{font-family:ui-monospace,monospace;font-size:12px;white-space:pre-wrap;background:#0d0b26;color:#c9f7a3;border-radius:9px;padding:14px;max-height:230px;overflow:auto;margin-top:12px;display:none}
+.log.show{display:block}
+.pill{font-size:11px;border-radius:100px;padding:3px 10px;font-weight:700}
+.pill.on{background:#e7f8d8;color:#3d7a17}.pill.off{background:#fbe3e8;color:var(--bad)}
+details{margin-top:10px}summary{cursor:pointer;font-size:13px;color:var(--ink2);font-weight:500}
+code{background:var(--surface);border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12.5px;direction:ltr;display:inline-block}
+.addbtn{border:1px dashed var(--line);background:var(--surface);border-radius:var(--r);padding:11px;width:100%;font:inherit;font-weight:500;color:var(--ink2);cursor:pointer}
+.addbtn:hover{border-color:var(--accent);color:var(--ink)}
+.note{background:#fbfbf7;border:1px solid var(--line);border-inline-start:3px solid var(--accent);border-radius:9px;padding:12px 14px;font-size:13px;color:var(--ink2);margin-bottom:14px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <span class="logo" id="hlogo"></span>
+  <h1>פאנל ניהול</h1>
+  <div class="sp">
+    <span class="pill off" id="gh-pill">GitHub לא מחובר</span>
+    <a class="plain" href="index.html" target="_blank">↗ צפייה באתר</a>
+    <button class="btn acc" id="save">שמירה ל‑GitHub</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <div class="note" id="loadnote">טוען את התוכן הנוכחי…</div>
+
+  <div class="tabs" id="tabs">
+    <button data-tab="setup" class="on">חיבור GitHub</button>
+    <button data-tab="general">כללי</button>
+    <button data-tab="colors">צבעים</button>
+    <button data-tab="resources">חומרים להורדה</button>
+    <button data-tab="voice">טון דיבור</button>
+    <button data-tab="imagery">אימג'רי</button>
+    <button data-tab="advanced">מתקדם / JSON</button>
+  </div>
+
+  <!-- SETUP -->
+  <section class="panel on" data-panel="setup">
+    <div class="card">
+      <h3>חיבור למאגר GitHub</h3>
+      <p class="hint">כדי לשמור שינויים והחלפת קבצים ישירות לאתר. הפרטים נשמרים מקומית בדפדפן הזה בלבד.</p>
+      <div class="row3">
+        <div><label>שם משתמש / ארגון (owner)</label><input type="text" id="gh-owner" placeholder="oz-global"></div>
+        <div><label>שם המאגר (repo)</label><input type="text" id="gh-repo" placeholder="brand"></div>
+        <div><label>ענף (branch)</label><input type="text" id="gh-branch" placeholder="main"></div>
+      </div>
+      <label>טוקן גישה (Fine‑grained PAT · הרשאת Contents: Read and write)</label>
+      <input type="password" id="gh-token" placeholder="github_pat_…">
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn sm ghost" id="gh-save-cfg">שמירת פרטים</button>
+        <button class="btn sm ghost" id="gh-test">בדיקת חיבור</button>
+      </div>
+      <details>
+        <summary>איך יוצרים טוקן? (הסבר קצר)</summary>
+        <div style="font-size:13px;color:var(--ink2);margin-top:10px;line-height:1.7">
+          1. ב‑GitHub: <code>Settings → Developer settings → Personal access tokens → Fine‑grained tokens → Generate new token</code><br>
+          2. תחת <b>Repository access</b> בוחרים את המאגר של האתר.<br>
+          3. תחת <b>Permissions → Repository permissions → Contents</b> בוחרים <code>Read and write</code>.<br>
+          4. מייצרים, מעתיקים את הטוקן ומדביקים כאן. הטוקן נשמר רק בדפדפן שלכם.
+        </div>
+      </details>
+    </div>
+    <div class="note">אין לכם טוקן / מעדיפים ידני? אפשר בכל שלב ללחוץ על <b>"הורדת content.json"</b> בלשונית "מתקדם", ולהעלות את הקובץ + הקבצים החדשים למאגר ידנית.</div>
+  </section>
+
+  <!-- GENERAL -->
+  <section class="panel" data-panel="general">
+    <div class="card">
+      <h3>כותרת ראשית</h3>
+      <label>כותרת (אפשר להקיף מילה ב‑&lt;em&gt; לצבע ירוק)</label>
+      <div class="bil">
+        <textarea data-bind="copy.heroTitle.he"></textarea>
+        <textarea data-bind="copy.heroTitle.en" dir="ltr"></textarea>
+      </div>
+      <label>תת‑כותרת</label>
+      <div class="bil">
+        <textarea data-bind="copy.heroLede.he"></textarea>
+        <textarea data-bind="copy.heroLede.en" dir="ltr"></textarea>
+      </div>
+    </div>
+    <div class="card">
+      <h3>גרסה ותאריך עדכון</h3>
+      <div class="row3">
+        <div><label>גרסה</label><input type="text" data-bind="brand.version"></div>
+        <div><label>עודכן (עברית)</label><input type="text" data-bind="brand.updated.he"></div>
+        <div><label>עודכן (אנגלית)</label><input type="text" dir="ltr" data-bind="brand.updated.en"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>כותרת תחתונה (Footer)</h3>
+      <label>טקסט יצירת קשר</label>
+      <div class="bil">
+        <textarea data-bind="copy.footContact.he"></textarea>
+        <textarea data-bind="copy.footContact.en" dir="ltr"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLORS -->
+  <section class="panel" data-panel="colors">
+    <div class="card">
+      <h3>פלטת צבעים</h3>
+      <p class="hint">כל צבע מוצג באתר עם HEX / RGB / CMYK ותפקיד. לחיצה על צבע באתר מעתיקה את ה‑HEX.</p>
+      <div id="colors-list"></div>
+      <button class="addbtn" id="add-color">+ הוספת צבע</button>
+    </div>
+  </section>
+
+  <!-- RESOURCES -->
+  <section class="panel" data-panel="resources">
+    <div class="card">
+      <h3>חומרים להורדה</h3>
+      <p class="hint">תבניות (פאוורפוינט, וורד), מסמכי PDF, פונטים וכל קובץ אחר. אפשר להחליף קובץ קיים או להעלות חדש — הקובץ נשמר במאגר ומתעדכן באתר אוטומטית.</p>
+      <div id="res-list"></div>
+      <button class="addbtn" id="add-res">+ הוספת חומר חדש</button>
+    </div>
+  </section>
+
+  <!-- VOICE -->
+  <section class="panel" data-panel="voice">
+    <div class="card">
+      <h3>תכונות טון הדיבור</h3>
+      <p class="hint">מאפייני השפה של המותג. הקטע מוסתר באתר כל עוד ריק.</p>
+      <div id="traits-list"></div>
+      <button class="addbtn" id="add-trait">+ הוספת תכונה</button>
+    </div>
+    <div class="card">
+      <h3>אומרים / לא אומרים</h3>
+      <div id="pairs-list"></div>
+      <button class="addbtn" id="add-pair">+ הוספת זוג</button>
+    </div>
+  </section>
+
+  <!-- IMAGERY -->
+  <section class="panel" data-panel="imagery">
+    <div class="card">
+      <h3>כללי אימג'רי / צילום</h3>
+      <p class="hint">מה כן ומה לא בבחירת תמונות. הקטע מוסתר באתר כל עוד ריק.</p>
+      <div id="img-list"></div>
+      <button class="addbtn" id="add-img">+ הוספת כלל</button>
+    </div>
+  </section>
+
+  <!-- ADVANCED -->
+  <section class="panel" data-panel="advanced">
+    <div class="card">
+      <h3>עריכת JSON ישירה</h3>
+      <p class="hint">לכל שדה שלא מופיע בטפסים (טיפוגרפיה, כללי שימוש, לוגו וכו'). זהירות: JSON לא תקין לא יישמר.</p>
+      <textarea id="json-edit" dir="ltr" style="min-height:340px;font-family:ui-monospace,monospace;font-size:12.5px"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+        <button class="btn sm ghost" id="json-apply">החלת השינויים</button>
+        <button class="btn sm ghost" id="json-refresh">רענון מהטופס</button>
+        <button class="btn sm ghost" id="dl-json">⬇ הורדת content.json</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="log" id="log"></div>
+</main>
+
+<div class="status" id="status"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const CFG_KEY = "oz_brand_admin_cfg";
+let DATA = {};
+
+/* ---------- helpers ---------- */
+function get(obj,path){ return path.split(".").reduce((o,k)=>o==null?undefined:o[k],obj); }
+function set(obj,path,val){
+  const ks=path.split("."); let o=obj;
+  for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null||typeof o[ks[i]]!=="object") o[ks[i]]={}; o=o[ks[i]]; }
+  o[ks[ks.length-1]]=val;
+}
+function status(msg,kind){ const s=$("#status"); s.textContent=msg; s.className="status show"+(kind?" "+kind:""); if(kind==="ok") setTimeout(()=>s.classList.remove("show"),3500); }
+function logln(x){ const l=$("#log"); l.classList.add("show"); l.textContent+=x+"\n"; l.scrollTop=l.scrollHeight; }
+function utf8ToB64(str){ return btoa(unescape(encodeURIComponent(str))); }
+function bufToB64(buf){ let bin=""; const b=new Uint8Array(buf); for(let i=0;i<b.length;i++) bin+=String.fromCharCode(b[i]); return btoa(bin); }
+const slugify = s => (s||"file").toString().trim().replace(/[^\w.\-]+/g,"-").replace(/^-+|-+$/g,"");
+
+/* pending binary uploads: path -> {b64, label} */
+const pending = new Map();
+
+/* ---------- config ---------- */
+function loadCfg(){
+  let c={}; try{ c=JSON.parse(localStorage.getItem(CFG_KEY)||"{}"); }catch(e){}
+  $("#gh-owner").value=c.owner||""; $("#gh-repo").value=c.repo||"";
+  $("#gh-branch").value=c.branch||"main"; $("#gh-token").value=c.token||"";
+  refreshPill();
+}
+function cfg(){ return {owner:$("#gh-owner").value.trim(),repo:$("#gh-repo").value.trim(),branch:($("#gh-branch").value.trim()||"main"),token:$("#gh-token").value.trim()}; }
+function saveCfg(){ localStorage.setItem(CFG_KEY,JSON.stringify(cfg())); refreshPill(); status("הפרטים נשמרו בדפדפן","ok"); }
+function refreshPill(){ const c=cfg(); const ok=c.owner&&c.repo&&c.token; const p=$("#gh-pill"); p.className="pill "+(ok?"on":"off"); p.textContent=ok?`GitHub · ${c.owner}/${c.repo}`:"GitHub לא מחובר"; }
+
+/* ---------- GitHub API ---------- */
+async function ghGet(path){
+  const c=cfg();
+  const url=`https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}?ref=${c.branch}`;
+  const r=await fetch(url,{headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json"}});
+  if(r.status===404) return null;
+  if(!r.ok) throw new Error(`GET ${path}: ${r.status} ${await r.text()}`);
+  return r.json();
+}
+async function ghPut(path,b64,message){
+  const c=cfg();
+  let sha; try{ const ex=await ghGet(path); sha=ex&&ex.sha; }catch(e){}
+  const url=`https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}`;
+  const body={message,content:b64,branch:c.branch}; if(sha) body.sha=sha;
+  const r=await fetch(url,{method:"PUT",headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json","Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok) throw new Error(`PUT ${path}: ${r.status} ${await r.text()}`);
+  return r.json();
+}
+async function testConn(){
+  const c=cfg(); if(!c.owner||!c.repo||!c.token){ status("חסרים פרטי חיבור","err"); return; }
+  status("בודק חיבור…");
+  try{
+    const r=await fetch(`https://api.github.com/repos/${c.owner}/${c.repo}`,{headers:{Authorization:`Bearer ${c.token}`,Accept:"application/vnd.github+json"}});
+    if(!r.ok) throw new Error(r.status+" "+await r.text());
+    const j=await r.json();
+    status(`חיבור תקין ✓ — ${j.full_name} (הרשאה: ${j.permissions&&j.permissions.push?"כתיבה":"קריאה בלבד"})`,"ok");
+  }catch(e){ status("החיבור נכשל — בדקו owner/repo/token","err"); logln("testConn: "+e.message); }
+}
+
+/* ---------- load content ---------- */
+async function loadContent(){
+  try{
+    const r=await fetch("data/content.json",{cache:"no-store"});
+    DATA=await r.json();
+    $("#loadnote").style.display="none";
+  }catch(e){
+    $("#loadnote").textContent="לא ניתן לטעון את data/content.json — נטען מבנה ריק.";
+    DATA={colors:[],resources:[],voice:{traits:[],pairs:[]},imagery:[],copy:{}};
+  }
+  renderAll();
+}
+
+/* ---------- bind simple fields ---------- */
+function bindFields(){
+  $$("[data-bind]").forEach(el=>{
+    el.value=get(DATA,el.dataset.bind)??"";
+    el.oninput=()=>set(DATA,el.dataset.bind,el.value);
+  });
+}
+
+/* ---------- colors ---------- */
+function renderColors(){
+  const box=$("#colors-list"); box.innerHTML="";
+  (DATA.colors||[]).forEach((c,i)=>{
+    const d=document.createElement("div"); d.className="item";
+    d.innerHTML=`
+      <button class="btn sm danger del" data-del="${i}">מחיקה</button>
+      <div class="row2">
+        <div><label>שם (עברית)</label><input type="text" data-c="${i}.name.he"></div>
+        <div><label>שם (אנגלית)</label><input type="text" dir="ltr" data-c="${i}.name.en"></div>
+      </div>
+      <div class="row3">
+        <div><label><span class="swatchmini" style="background:${c.hex||"#fff"}"></span>HEX</label><input type="text" dir="ltr" data-c="${i}.hex"></div>
+        <div><label>RGB</label><input type="text" dir="ltr" data-c="${i}.rgb" placeholder="131 212 41"></div>
+        <div><label>CMYK</label><input type="text" dir="ltr" data-c="${i}.cmyk" placeholder="50 0 100 0"></div>
+      </div>
+      <div class="row2">
+        <div><label>תפקיד (עברית)</label><input type="text" data-c="${i}.role.he"></div>
+        <div><label>תפקיד (אנגלית)</label><input type="text" dir="ltr" data-c="${i}.role.en"></div>
+      </div>`;
+    box.appendChild(d);
+  });
+  box.querySelectorAll("[data-c]").forEach(el=>{
+    const [i,...rest]=el.dataset.c.split("."); const path=rest.join(".");
+    el.value=get(DATA.colors[i],path)??"";
+    el.oninput=()=>{ set(DATA.colors[i],path,el.value);
+      if(path==="hex"){ const sw=el.closest("label").querySelector(".swatchmini"); if(sw) sw.style.background=el.value; } };
+  });
+  box.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ DATA.colors.splice(+b.dataset.del,1); renderColors(); });
+}
+
+/* ---------- resources (with file upload) ---------- */
+function fileRow(r,i){
+  const cur=r.file?`<span class="cur">${r.file.split("/").pop()}</span>`:`<span class="cur" style="color:var(--bad)">אין קובץ עדיין</span>`;
+  return `
+  <div class="item">
+    <button class="btn sm danger del" data-rdel="${i}">מחיקה</button>
+    <div class="row2">
+      <div><label>קטגוריה (עברית)</label><input type="text" data-r="${i}.cat.he" placeholder="תבניות"></div>
+      <div><label>קטגוריה (אנגלית)</label><input type="text" dir="ltr" data-r="${i}.cat.en" placeholder="Templates"></div>
+    </div>
+    <div class="row2">
+      <div><label>כותרת (עברית)</label><input type="text" data-r="${i}.title.he"></div>
+      <div><label>כותרת (אנגלית)</label><input type="text" dir="ltr" data-r="${i}.title.en"></div>
+    </div>
+    <div class="bil">
+      <div><label>תיאור (עברית)</label><textarea data-r="${i}.desc.he"></textarea></div>
+      <div><label>תיאור (אנגלית)</label><textarea dir="ltr" data-r="${i}.desc.en"></textarea></div>
+    </div>
+    <label>קובץ</label>
+    <div class="filebox">
+      ${cur}
+      <span class="new" data-newlabel="${i}"></span>
+      <label class="btn sm ghost" style="margin:0;cursor:pointer">בחירת קובץ<input type="file" data-rfile="${i}" hidden></label>
+    </div>
+  </div>`;
+}
+function renderResources(){
+  const box=$("#res-list"); box.innerHTML=(DATA.resources||[]).map((r,i)=>fileRow(r,i)).join("");
+  box.querySelectorAll("[data-r]").forEach(el=>{
+    const [i,...rest]=el.dataset.r.split("."); const path=rest.join(".");
+    el.value=get(DATA.resources[i],path)??"";
+    el.oninput=()=>set(DATA.resources[i],path,el.value);
+  });
+  box.querySelectorAll("[data-rdel]").forEach(b=>b.onclick=()=>{ DATA.resources.splice(+b.dataset.rdel,1); renderResources(); });
+  box.querySelectorAll("[data-rfile]").forEach(inp=>inp.onchange=async e=>{
+    const i=+inp.dataset.rfile, f=e.target.files[0]; if(!f) return;
+    const rp=(DATA.github&&DATA.github.resourcesPath)||"assets/resources";
+    const name=slugify(f.name);
+    const path=`${rp}/${name}`;
+    const buf=await f.arrayBuffer();
+    pending.set(path,{b64:bufToB64(buf),label:f.name});
+    DATA.resources[i].file=path;
+    DATA.resources[i].ext=(f.name.split(".").pop()||"").toUpperCase();
+    DATA.resources[i].bytes=f.size;
+    box.querySelector(`[data-newlabel="${i}"]`).textContent=`✓ קובץ חדש: ${f.name} (${(f.size/1024|0)}KB) — יעלה בשמירה`;
+  });
+}
+
+/* ---------- voice ---------- */
+function renderVoice(){
+  DATA.voice=DATA.voice||{traits:[],pairs:[]};
+  const tb=$("#traits-list");
+  tb.innerHTML=(DATA.voice.traits||[]).map((x,i)=>`
+    <div class="item"><button class="btn sm danger del" data-tdel="${i}">מחיקה</button>
+      <div class="row2">
+        <div><label>שם התכונה (עברית)</label><input type="text" data-t="${i}.name.he"></div>
+        <div><label>שם התכונה (אנגלית)</label><input type="text" dir="ltr" data-t="${i}.name.en"></div>
+      </div>
+      <div class="bil">
+        <div><label>תיאור (עברית)</label><textarea data-t="${i}.desc.he"></textarea></div>
+        <div><label>תיאור (אנגלית)</label><textarea dir="ltr" data-t="${i}.desc.en"></textarea></div>
+      </div></div>`).join("");
+  tb.querySelectorAll("[data-t]").forEach(el=>{ const [i,...r]=el.dataset.t.split("."),p=r.join(".");
+    el.value=get(DATA.voice.traits[i],p)??""; el.oninput=()=>set(DATA.voice.traits[i],p,el.value); });
+  tb.querySelectorAll("[data-tdel]").forEach(b=>b.onclick=()=>{ DATA.voice.traits.splice(+b.dataset.tdel,1); renderVoice(); });
+
+  const pb=$("#pairs-list");
+  pb.innerHTML=(DATA.voice.pairs||[]).map((x,i)=>`
+    <div class="item"><button class="btn sm danger del" data-pdel="${i}">מחיקה</button>
+      <div class="row2">
+        <div><label>אומרים ✓ (עברית)</label><input type="text" data-p="${i}.say.he"></div>
+        <div><label>אומרים ✓ (אנגלית)</label><input type="text" dir="ltr" data-p="${i}.say.en"></div>
+      </div>
+      <div class="row2">
+        <div><label>לא אומרים ✗ (עברית)</label><input type="text" data-p="${i}.dont.he"></div>
+        <div><label>לא אומרים ✗ (אנגלית)</label><input type="text" dir="ltr" data-p="${i}.dont.en"></div>
+      </div></div>`).join("");
+  pb.querySelectorAll("[data-p]").forEach(el=>{ const [i,...r]=el.dataset.p.split("."),p=r.join(".");
+    el.value=get(DATA.voice.pairs[i],p)??""; el.oninput=()=>set(DATA.voice.pairs[i],p,el.value); });
+  pb.querySelectorAll("[data-pdel]").forEach(b=>b.onclick=()=>{ DATA.voice.pairs.splice(+b.dataset.pdel,1); renderVoice(); });
+}
+
+/* ---------- imagery ---------- */
+function renderImagery(){
+  DATA.imagery=DATA.imagery||[];
+  const box=$("#img-list");
+  box.innerHTML=DATA.imagery.map((x,i)=>`
+    <div class="item"><button class="btn sm danger del" data-idel="${i}">מחיקה</button>
+      <label>סוג</label>
+      <select data-i="${i}.ok">
+        <option value="true">מותר ✓</option><option value="false">אסור ✗</option>
+      </select>
+      <div class="row2">
+        <div><label>כותרת (עברית)</label><input type="text" data-i="${i}.title.he"></div>
+        <div><label>כותרת (אנגלית)</label><input type="text" dir="ltr" data-i="${i}.title.en"></div>
+      </div>
+      <div class="bil">
+        <div><label>תיאור (עברית)</label><textarea data-i="${i}.desc.he"></textarea></div>
+        <div><label>תיאור (אנגלית)</label><textarea dir="ltr" data-i="${i}.desc.en"></textarea></div>
+      </div></div>`).join("");
+  box.querySelectorAll("[data-i]").forEach(el=>{ const [i,...r]=el.dataset.i.split("."),p=r.join(".");
+    let v=get(DATA.imagery[i],p); if(p==="ok") v=String(v);
+    el.value=v??""; el.oninput=()=>set(DATA.imagery[i],p, p==="ok"? el.value==="true": el.value); });
+  box.querySelectorAll("[data-idel]").forEach(b=>b.onclick=()=>{ DATA.imagery.splice(+b.dataset.idel,1); renderImagery(); });
+}
+
+/* ---------- advanced ---------- */
+function renderJSON(){ $("#json-edit").value=JSON.stringify(DATA,null,2); }
+
+function renderAll(){ bindFields(); renderColors(); renderResources(); renderVoice(); renderImagery(); renderJSON(); drawLogo(); }
+
+/* ---------- save ---------- */
+async function saveAll(){
+  const c=cfg();
+  if(!c.owner||!c.repo||!c.token){ status("צריך קודם לחבר GitHub (לשונית 'חיבור GitHub')","err"); return; }
+  $("#save").disabled=true; $("#log").textContent=""; status("שומר…");
+  try{
+    // 1) upload pending files
+    for(const [path,info] of pending){
+      logln("מעלה קובץ: "+path);
+      await ghPut(path,info.b64,`Upload ${info.label} via admin panel`);
+    }
+    // 2) write content.json
+    logln("שומר data/content.json");
+    await ghPut("data/content.json",utf8ToB64(JSON.stringify(DATA,null,2)),"Update brand content via admin panel");
+    pending.clear();
+    $$("[data-newlabel]").forEach(s=>s.textContent="");
+    status("נשמר בהצלחה ✓ — האתר יתעדכן בתוך דקה","ok");
+    logln("✓ הסתיים. GitHub Pages ייבנה מחדש אוטומטית.");
+  }catch(e){
+    status("שגיאה בשמירה — פרטים בלוג למטה","err"); logln("שגיאה: "+e.message);
+  }finally{ $("#save").disabled=false; }
+}
+
+/* ---------- logo in header ---------- */
+function drawLogo(){
+  const g=DATA.logo; if(!g||!g.groups){ return; }
+  const crop=(g.crops&&g.crops.symbol)||g.viewBox;
+  const acc=(DATA.design&&DATA.design.accent)||"#83D429";
+  const body=g.groups.filter(gr=>gr.part==="symbol").map(gr=>`<g fill="${acc}">${gr.d.map(d=>`<path d="${d}"/>`).join("")}</g>`).join("");
+  $("#hlogo").innerHTML=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${crop}">${body}</svg>`;
+}
+
+/* ---------- add buttons ---------- */
+$("#add-color").onclick=()=>{ DATA.colors=DATA.colors||[]; DATA.colors.push({name:{he:"",en:""},hex:"#000000",rgb:"",cmyk:"",role:{he:"",en:""}}); renderColors(); };
+$("#add-res").onclick=()=>{ DATA.resources=DATA.resources||[]; DATA.resources.push({cat:{he:"",en:""},title:{he:"",en:""},desc:{he:"",en:""},file:"",ext:""}); renderResources(); };
+$("#add-trait").onclick=()=>{ DATA.voice=DATA.voice||{traits:[],pairs:[]}; DATA.voice.traits.push({name:{he:"",en:""},desc:{he:"",en:""}}); renderVoice(); };
+$("#add-pair").onclick=()=>{ DATA.voice=DATA.voice||{traits:[],pairs:[]}; DATA.voice.pairs.push({say:{he:"",en:""},dont:{he:"",en:""}}); renderVoice(); };
+$("#add-img").onclick=()=>{ DATA.imagery=DATA.imagery||[]; DATA.imagery.push({ok:true,title:{he:"",en:""},desc:{he:"",en:""}}); renderImagery(); };
+
+/* ---------- advanced buttons ---------- */
+$("#json-apply").onclick=()=>{ try{ DATA=JSON.parse($("#json-edit").value); renderAll(); status("ה‑JSON הוחל","ok"); }catch(e){ status("JSON לא תקין: "+e.message,"err"); } };
+$("#json-refresh").onclick=renderJSON;
+$("#dl-json").onclick=()=>{ const b=new Blob([JSON.stringify(DATA,null,2)],{type:"application/json"});
+  const a=Object.assign(document.createElement("a"),{href:URL.createObjectURL(b),download:"content.json"}); a.click(); };
+
+/* ---------- tabs ---------- */
+$("#tabs").onclick=e=>{ const b=e.target.closest("[data-tab]"); if(!b) return;
+  $$(".tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  $$(".panel").forEach(p=>p.classList.toggle("on",p.dataset.panel===b.dataset.tab)); };
+
+/* ---------- setup buttons ---------- */
+$("#gh-save-cfg").onclick=saveCfg;
+$("#gh-test").onclick=testConn;
+$("#save").onclick=saveAll;
+["gh-owner","gh-repo","gh-branch","gh-token"].forEach(id=>$("#"+id).addEventListener("input",refreshPill));
+
+/* ---------- boot ---------- */
+loadCfg();
+loadContent();
+</script>
+</body>
+</html>
