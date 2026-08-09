@@ -859,7 +859,7 @@ const UI = {
        bad:"לא קריא על הרקע הזה", derived:"נגזר",
        bg:{trans:"שקוף",light:"לבן",dark:"כהה",brand:"צבע המותג"},
        yes:"מותר", no:"אסור", say:"אומרים", dont:"לא אומרים",
-       download:"הורדה", emptyRes:"עדיין לא הועלו חומרים בקטגוריה זו. אפשר להוסיף דרך פאנל הניהול.",
+       download:"הורדה", open:"פתיחה", emptyRes:"עדיין לא הועלו חומרים בקטגוריה זו. אפשר להוסיף דרך פאנל הניהול.",
        downloading:n=>`מוריד ${n} קובצי SVG…`, downloaded:f=>`${f} ירד`,
        fileMissing:k=>`הקובץ ${k} עדיין לא הועלה — אפשר להוסיף אותו דרך פאנל הניהול`,
        pngFail:"ייצוא PNG נכשל — הורידו את ה-SVG" },
@@ -870,7 +870,7 @@ const UI = {
        bad:"Not legible on this background", derived:"derived",
        bg:{trans:"Transparent",light:"White",dark:"Dark",brand:"Brand colour"},
        yes:"DO", no:"DON'T", say:"Say", dont:"Don't say",
-       download:"Download", emptyRes:"No materials uploaded in this category yet. Add them from the admin panel.",
+       download:"Download", open:"Open", emptyRes:"No materials uploaded in this category yet. Add them from the admin panel.",
        downloading:n=>`Downloading ${n} SVG files…`, downloaded:f=>`${f} downloaded`,
        fileMissing:k=>`${k} hasn't been uploaded yet — add it from the admin panel`,
        pngFail:"PNG export failed — download the SVG instead" }
@@ -1010,21 +1010,29 @@ function renderType(){
 }
 
 const DLICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 21h16"/></svg>`;
+const EXTICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>`;
 function renderResources(){
   const u = U();
-  document.getElementById("res-grid").innerHTML = (BRAND.resources||[]).map(r => `
+  document.getElementById("res-grid").innerHTML = (BRAND.resources||[]).map(r => {
+    const isLink = !!r.url;
+    const attrs = isLink
+      ? `href="${esc(r.url)}" target="_blank" rel="noopener"`
+      : `href="${esc(r.file)}" download`;
+    const badge = r.ext ? esc(r.ext) : (isLink ? "LINK" : "");
+    return `
     <div class="res">
       <div class="res-top">
         ${r.cat ? `<span class="cat">${esc(t(r.cat))}</span>` : ""}
         <b>${esc(t(r.title))}</b>
         ${r.desc ? `<p>${esc(t(r.desc))}</p>` : ""}
       </div>
-      <a class="res-dl" href="${esc(r.file)}" download>
-        ${DLICON}<span>${u.download}</span>
-        ${r.ext ? `<span class="ext">${esc(r.ext)}</span>` : ""}
-        ${r.bytes ? `<span class="sz">${fmtBytes(r.bytes)}</span>` : ""}
+      <a class="res-dl" ${attrs}>
+        ${isLink ? EXTICON : DLICON}<span>${isLink ? u.open : u.download}</span>
+        ${badge ? `<span class="ext">${badge}</span>` : ""}
+        ${(!isLink && r.bytes) ? `<span class="sz">${fmtBytes(r.bytes)}</span>` : ""}
       </a>
-    </div>`).join("");
+    </div>`;
+  }).join("");
 }
 
 function renderUsage(){
