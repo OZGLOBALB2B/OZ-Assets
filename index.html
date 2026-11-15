@@ -71,12 +71,12 @@ a{color:inherit}
 /* ================= LAYOUT ================= */
 main{margin-inline-start:var(--nav-w)}
 section{padding:clamp(80px,9vw,120px) var(--pad);border-bottom:1px solid var(--line)}
-.wrap{max-width:1160px}
+.wrap{max-width:none}
 .eyebrow{font-weight:700;font-size:15px;color:var(--accent);margin-bottom:12px}
 h1,h2,h3{font-weight:500;letter-spacing:-.02em;line-height:1}
 h2{font-size:clamp(38px,4.6vw,64px);margin-bottom:22px}
 h3{font-weight:500;font-size:clamp(20px,1.8vw,24px);line-height:1.2}
-.lead{font-size:clamp(17px,1.6vw,20px);line-height:1.5;color:var(--muted);max-width:60ch;font-weight:300}
+.lead{font-size:clamp(17px,1.6vw,20px);line-height:1.5;color:var(--muted);max-width:70ch;font-weight:300}
 .card{background:var(--bg-deep);border-radius:var(--r);border:1px solid transparent}
 .card.outline{background:transparent;border-color:var(--line)}
 .grid-top{margin-top:48px}
@@ -257,8 +257,8 @@ main > section:not(#cover)::after{content:"";position:absolute;inset:0;z-index:-
 .seg button i{width:14px;height:14px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--navy)}
 .ic-count{font-size:13px;color:var(--faint);margin-inline-start:auto}
-.ic-wrap{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:start}
-.ic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.ic-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.ic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
 .ic{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;aspect-ratio:1;padding:10px 6px;border-radius:12px;
   background:var(--bg-deep);border:1px solid transparent;color:var(--ic);transition:border-color .15s,background-color .15s}
 .ic svg{width:28px;height:28px}
@@ -278,7 +278,8 @@ main > section:not(#cover)::after{content:"";position:absolute;inset:0;z-index:-
 .ic-detail select{background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;font-size:13px}
 .ic-detail .acts{display:grid;gap:8px;margin-top:16px}
 .ic-detail .acts .btn{justify-content:center}
-.ic-more{margin-top:14px;text-align:center}
+.ic-more{margin-top:20px;text-align:center}
+.ic-more .btn{min-width:200px;justify-content:center}
 .ic-empty{padding:40px;text-align:center;color:var(--muted)}
 .ic-note{margin-top:16px;font-size:13px;color:var(--faint)}
 .ic-note a{color:var(--muted)}
@@ -1240,7 +1241,7 @@ const UI = {
   he:{ title:"נכסי המותג", docName:"נכסי המותג",
        groups:{logo:"לוגו",identity:"זהות",resources:"משאבים"},
        nav:{logos:"איזו גרסה על איזה רקע",versions:"גרסאות הלוגו",usage:"כללי שימוש",colors:"צבעים",type:"טיפוגרפיה",voice:"טון דיבור",imagery:"אימג'רי",resources:"חומרים להורדה",action:"המותג בפעולה",mood:"תמונות אווירה",icons:"אייקונים"},
-       icSearch:"חיפוש אייקון — בעברית או באנגלית", icColor:"צבע", icCount:n=>`${n} אייקונים`, icNone:"לא נמצאו אייקונים. נסו מילה אחרת באנגלית.", icMore:"הצגת עוד", icLoading:"טוען את ספריית האייקונים…", icFail:"לא הצלחתי לטעון את ספריית האייקונים. נסו לרענן.", icDl:"הורדת SVG", icCopy:"העתקת קוד SVG", icCopied:"קוד ה‑SVG הועתק", icSize:"גודל", icStroke:"עובי קו", icPick:"בחרו אייקון מהרשימה", icNote:"מבוסס על ספריית Lucide (רישיון ISC).",
+       icSearch:"חיפוש אייקון — בעברית או באנגלית", icColor:"צבע", icCount:n=>`${n} אייקונים`, icNone:"לא נמצאו אייקונים. נסו מילה אחרת באנגלית.", icMore:"Load more", icMoreOf:(a,b)=>`מוצגים ${a} מתוך ${b}`, icLoading:"טוען את ספריית האייקונים…", icFail:"לא הצלחתי לטעון את ספריית האייקונים. נסו לרענן.", icDl:"הורדת SVG", icCopy:"העתקת קוד SVG", icCopied:"קוד ה‑SVG הועתק", icSize:"גודל", icStroke:"עובי קו", icPick:"בחרו אייקון מהרשימה", icNote:"מבוסס על ספריית Lucide (רישיון ISC).",
        dlAllImg:"הורדת כל התמונות", zipping:n=>`מכין ZIP של ${n} תמונות…`, zipped:"ה‑ZIP ירד", zipFail:"לא הצלחתי לארוז את כל התמונות — אפשר להוריד אותן אחת־אחת", prev:"הקודמת", next:"הבאה", closeLb:"סגירה",
        actionLede:"ככה השפה של OZ נראית באתר — אסטרטגיה, קריאייטיב ודיגיטל.",
        action:[["אסטרטגיה","בונים אסטרטגיית מותג, שיווק ותוכן סביב המטרות העסקיות."],["קריאייטיב","קונספטים, עיצוב וחומרים שיווקיים שנשענים על מסר ברור."],["שיווק דיגיטלי","סושיאל, תוכן, ממומן, ABM ו‑Inbound ב‑HubSpot."]],
@@ -1262,7 +1263,7 @@ const UI = {
   en:{ title:"Brand assets", docName:"Brand assets",
        groups:{logo:"Logo",identity:"Identity",resources:"Resources"},
        nav:{logos:"Which version, which background",versions:"Logo versions",usage:"Usage",colors:"Colours",type:"Typography",voice:"Voice",imagery:"Imagery",resources:"Downloads",action:"The brand in action",mood:"Mood imagery",icons:"Icons"},
-       icSearch:"Search icons", icColor:"Colour", icCount:n=>`${n} icons`, icNone:"No icons found. Try another word.", icMore:"Show more", icLoading:"Loading the icon library…", icFail:"Couldn’t load the icon library. Try refreshing.", icDl:"Download SVG", icCopy:"Copy SVG code", icCopied:"SVG code copied", icSize:"Size", icStroke:"Stroke", icPick:"Pick an icon from the list", icNote:"Based on the Lucide library (ISC licence).",
+       icSearch:"Search icons", icColor:"Colour", icCount:n=>`${n} icons`, icNone:"No icons found. Try another word.", icMore:"Load more", icMoreOf:(a,b)=>`Showing ${a} of ${b}`, icLoading:"Loading the icon library…", icFail:"Couldn’t load the icon library. Try refreshing.", icDl:"Download SVG", icCopy:"Copy SVG code", icCopied:"SVG code copied", icSize:"Size", icStroke:"Stroke", icPick:"Pick an icon from the list", icNote:"Based on the Lucide library (ISC licence).",
        dlAllImg:"Download all images", zipping:n=>`Packing ${n} images…`, zipped:"ZIP downloaded", zipFail:"Couldn’t pack the images — download them one by one", prev:"Previous", next:"Next", closeLb:"Close",
        actionLede:"How the OZ language looks on our website — strategy, creative and digital.",
        action:[["Strategy","Brand, marketing and content strategy built around business goals."],["Creative","Concepts, visual design and marketing materials built on a clear message."],["Digital marketing","Social, content, paid, ABM and inbound HubSpot marketing."]],
@@ -1496,6 +1497,7 @@ const IC_TAGS = {"a-arrow-down":"alphabet character text font typography directi
 const IC_HE = {"חץ":"arrow","חצים":"arrow","משתמש":"user","אדם":"user","אנשים":"users","צוות":"users","בית":"home house","מייל":"mail","דואר":"mail","טלפון":"phone","חיפוש":"search","הגדרות":"settings","לב":"heart","כוכב":"star","גרף":"chart","תרשים":"chart","לוח שנה":"calendar","תאריך":"calendar","מיקום":"map-pin","מפה":"map","מנעול":"lock","אבטחה":"shield","קובץ":"file","מסמך":"file","תיקייה":"folder","מצלמה":"camera","תמונה":"image","ענן":"cloud","הורדה":"download","העלאה":"upload","שעון":"clock","זמן":"clock","כסף":"dollar banknote coins","עגלה":"cart","קנייה":"shopping","גלובוס":"globe","עולם":"globe","מסך":"monitor screen","מחשב":"laptop computer","נייד":"smartphone","מטרה":"target","רעיון":"lightbulb","נורה":"lightbulb","וי":"check","אישור":"check","איקס":"x","סגירה":"x","פלוס":"plus","הוספה":"plus","משאית":"truck","משלוח":"truck package","מפעל":"factory","תעשייה":"factory","שיחה":"message","צ'אט":"message chat","הודעה":"message","פעמון":"bell","התראה":"bell","מגן":"shield","כלי":"wrench tool","הנדסה":"cog wrench","רשת":"network","ענף":"git-branch","קוד":"code","מיקרופון":"mic","וידאו":"video","מוזיקה":"music","ספר":"book","למידה":"graduation","פרס":"award trophy","גביע":"trophy","דגל":"flag","מתנה":"gift","עלה":"leaf","סביבה":"leaf","מים":"droplet","אש":"flame","ברק":"zap","אנרגיה":"zap battery","רכב":"car","מטוס":"plane","בניין":"building","חנות":"store","תיק":"briefcase","עסקים":"briefcase","שקף":"presentation","מצגת":"presentation","אחוז":"percent","צמיחה":"trending","עלייה":"trending-up","ירידה":"trending-down","שותפות":"handshake","לחיצת יד":"handshake","קישור":"link","שיתוף":"share","עריכה":"pencil edit","מחיקה":"trash","פח":"trash","בריאות":"heart-pulse stethoscope","רפואה":"stethoscope pill","מעבדה":"flask","מדע":"atom flask"};
 /* shown first when the search is empty — the icons OZ uses most */
 const IC_TOP = ["target","rocket","lightbulb","users","handshake","globe","chart-line","trending-up","chart-pie","briefcase","building-2","factory","presentation","megaphone","award","shield-check","badge-check","sparkles","mail","phone","message-circle","map-pin","calendar","clock","search","settings","download","upload","link","share-2","check","x","plus","arrow-right","arrow-left","circle-check","star","heart","zap","leaf","cpu","cloud","database","layers","puzzle","route","truck","package","shopping-cart","credit-card","graduation-cap","book-open","pen-tool","palette","camera","video","mic"];
+const IC_PAGE = 48;   /* icons per batch — "Load more" adds another batch */
 let LUCIDE = null, IC_LIST = [], IC_SHOWN = 0, IC_SEL = null, IC_SIZE = 24;
 const icCfg = () => BRAND.icons || {};
 const icColors = () => (icCfg().colors || ["#83D429","#FFFFFF","#0F0156"]).map(hex => {
@@ -1523,7 +1525,7 @@ function bodyIcons(){
     </div>
     <div class="ic-wrap">
       <div><div class="ic-grid" id="ic-grid"><div class="ic-empty">${u.icLoading}</div></div>
-        <div class="ic-more"><button class="btn" id="ic-more" hidden>${u.icMore}</button></div></div>
+        <div class="ic-more"><button class="btn" id="ic-more" hidden>${u.icMore}</button><p class="ic-note" id="ic-shown"></p></div></div>
       <aside class="card ic-detail" id="ic-detail"></aside>
     </div>
     <p class="ic-note">${u.icNote} <a href="https://lucide.dev/license" target="_blank" rel="noopener">lucide.dev</a></p>
@@ -1544,12 +1546,13 @@ function icRender(reset){
   const u = U();
   if(reset){ IC_LIST = icFilter(document.getElementById("ic-q").value); IC_SHOWN = 0; g.innerHTML = ""; }
   document.getElementById("ic-count").textContent = u.icCount(IC_LIST.length);
-  if(!IC_LIST.length){ g.innerHTML = `<div class="ic-empty">${u.icNone}</div>`; document.getElementById("ic-more").hidden = true; return; }
-  const next = IC_LIST.slice(IC_SHOWN, IC_SHOWN + 240);
+  if(!IC_LIST.length){ g.innerHTML = `<div class="ic-empty">${u.icNone}</div>`; document.getElementById("ic-more").hidden = true; document.getElementById("ic-shown").textContent = ""; return; }
+  const next = IC_LIST.slice(IC_SHOWN, IC_SHOWN + IC_PAGE);
   g.insertAdjacentHTML("beforeend", next.map(n =>
     `<button class="ic" data-icon="${n}" aria-pressed="${n===IC_SEL}" title="${n}">${icSvg(n,"currentColor",24,IC_STROKE)}<span>${n}</span></button>`).join(""));
   IC_SHOWN += next.length;
   document.getElementById("ic-more").hidden = IC_SHOWN >= IC_LIST.length;
+  document.getElementById("ic-shown").textContent = u.icMoreOf(IC_SHOWN, IC_LIST.length);
   if(!IC_SEL || !IC_LIST.includes(IC_SEL)) IC_SEL = IC_LIST[0];
   icDetail();
 }
