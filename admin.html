@@ -83,6 +83,7 @@ code{background:var(--surface);border:1px solid var(--line);border-radius:5px;pa
     <button data-tab="general">כללי</button>
     <button data-tab="colors">צבעים</button>
     <button data-tab="resources">חומרים להורדה</button>
+    <button data-tab="action">המותג בפעולה</button>
     <button data-tab="voice">טון דיבור</button>
     <button data-tab="imagery">אימג'רי</button>
     <button data-tab="advanced">מתקדם / JSON</button>
@@ -121,16 +122,25 @@ code{background:var(--surface);border:1px solid var(--line);border-radius:5px;pa
   <section class="panel" data-panel="general">
     <div class="card">
       <h3>כותרת ראשית</h3>
-      <label>כותרת (אפשר להקיף מילה ב‑&lt;em&gt; לצבע ירוק)</label>
+      <label>כותרת ההירו (מוצגת בתוך סוגריים ירוקים)</label>
       <div class="bil">
         <textarea data-bind="copy.heroTitle.he"></textarea>
         <textarea data-bind="copy.heroTitle.en" dir="ltr"></textarea>
       </div>
-      <label>תת‑כותרת</label>
-      <div class="bil">
-        <textarea data-bind="copy.heroLede.he"></textarea>
-        <textarea data-bind="copy.heroLede.en" dir="ltr"></textarea>
-      </div>
+    </div>
+    <div class="card">
+      <h3>וידאו ותמונת ההירו</h3>
+      <p class="hint">הווידאו מתנגן ברקע ההירו (בלי קול, בלופ). התמונה מוצגת עד שהווידאו נטען, ובמקומו אם אין וידאו. אפשר להדביק כתובת או להעלות קובץ למאגר.</p>
+      <label>וידאו (MP4 / WebM)</label>
+      <input type="text" dir="ltr" data-bind="hero.video" placeholder="assets/hero/hero.mp4 או https://…">
+      <div class="filebox"><span class="cur" data-hcur="video"></span><span class="new" data-hnew="video"></span>
+        <label class="btn sm ghost" style="margin:0;cursor:pointer">העלאת וידאו<input type="file" accept="video/*" data-hfile="video" hidden></label></div>
+      <label>תמונה — עברית (RTL)</label>
+      <div class="filebox"><span class="cur" data-hcur="poster"></span><span class="new" data-hnew="poster"></span>
+        <label class="btn sm ghost" style="margin:0;cursor:pointer">החלפת תמונה<input type="file" accept="image/*" data-hfile="poster" hidden></label></div>
+      <label>תמונה — אנגלית (LTR)</label>
+      <div class="filebox"><span class="cur" data-hcur="posterLtr"></span><span class="new" data-hnew="posterLtr"></span>
+        <label class="btn sm ghost" style="margin:0;cursor:pointer">החלפת תמונה<input type="file" accept="image/*" data-hfile="posterLtr" hidden></label></div>
     </div>
     <div class="card">
       <h3>גרסה ותאריך עדכון</h3>
@@ -157,6 +167,26 @@ code{background:var(--surface);border:1px solid var(--line);border-radius:5px;pa
       <p class="hint">כל צבע מוצג באתר עם HEX / RGB / CMYK ותפקיד. לחיצה על צבע באתר מעתיקה את ה‑HEX.</p>
       <div id="colors-list"></div>
       <button class="addbtn" id="add-color">+ הוספת צבע</button>
+    </div>
+  </section>
+
+  <!-- IN ACTION -->
+  <section class="panel" data-panel="action">
+    <div class="card">
+      <h3>המותג בפעולה</h3>
+      <p class="hint">תמונות או GIF שמראים את השפה של OZ בשימוש. אפשר להדביק כתובת תמונה או להעלות קובץ. סעיף בלי פריטים לא מוצג באתר.</p>
+      <div class="row2">
+        <div><label>כותרת הסעיף (עברית)</label><input type="text" data-bind="copy.sections.inAction.title.he"></div>
+        <div><label>כותרת הסעיף (אנגלית)</label><input type="text" dir="ltr" data-bind="copy.sections.inAction.title.en"></div>
+      </div>
+      <div class="bil">
+        <div><label>שורת הסבר (עברית)</label><textarea data-bind="copy.sections.inAction.lede.he"></textarea></div>
+        <div><label>שורת הסבר (אנגלית)</label><textarea dir="ltr" data-bind="copy.sections.inAction.lede.en"></textarea></div>
+      </div>
+    </div>
+    <div class="card">
+      <div id="act-list"></div>
+      <button class="addbtn" id="add-act">+ הוספת פריט</button>
     </div>
   </section>
 
@@ -403,6 +433,58 @@ function renderResources(){
   });
 }
 
+/* ---------- hero media ---------- */
+function renderHero(){
+  DATA.hero=DATA.hero||{};
+  $$("[data-hcur]").forEach(el=>{ const v=DATA.hero[el.dataset.hcur]; el.textContent=v?v.split("/").pop():"—"; });
+  $$("[data-hfile]").forEach(inp=>inp.onchange=async e=>{
+    const key=inp.dataset.hfile, f=e.target.files[0]; if(!f) return;
+    const path=`assets/hero/${slugify(f.name)}`;
+    pending.set(path,{b64:bufToB64(await f.arrayBuffer()),label:f.name});
+    DATA.hero[key]=path;
+    $(`[data-hnew="${key}"]`).textContent=`✓ ${f.name} (${(f.size/1048576).toFixed(1)}MB) — יעלה בשמירה`;
+    if(key==="video") $('[data-bind="hero.video"]').value=path;
+    $(`[data-hcur="${key}"]`).textContent=path.split("/").pop();
+    if(f.size>25*1048576) status("שימו לב: קובץ מעל 25MB עלול להיכשל בהעלאה דרך הפאנל","err");
+  });
+}
+
+/* ---------- brand in action ---------- */
+function renderAction(){
+  DATA.inAction=DATA.inAction||[];
+  const box=$("#act-list");
+  box.innerHTML=DATA.inAction.map((x,i)=>`
+  <div class="item">
+    <button class="btn sm danger del" data-adel="${i}">מחיקה</button>
+    <label>תמונה / GIF</label>
+    <input type="text" dir="ltr" data-a="${i}.img" placeholder="https://… או assets/action/…">
+    <div class="filebox"><span class="cur">${x.img?x.img.split("/").pop():"אין תמונה"}</span><span class="new" data-anew="${i}"></span>
+      <label class="btn sm ghost" style="margin:0;cursor:pointer">העלאת תמונה<input type="file" accept="image/*" data-afile="${i}" hidden></label></div>
+    <div class="row2">
+      <div><label>כותרת (עברית)</label><input type="text" data-a="${i}.title.he"></div>
+      <div><label>כותרת (אנגלית)</label><input type="text" dir="ltr" data-a="${i}.title.en"></div>
+    </div>
+    <div class="bil">
+      <div><label>תיאור (עברית)</label><textarea data-a="${i}.desc.he"></textarea></div>
+      <div><label>תיאור (אנגלית)</label><textarea dir="ltr" data-a="${i}.desc.en"></textarea></div>
+    </div>
+  </div>`).join("");
+  box.querySelectorAll("[data-a]").forEach(el=>{
+    const [i,...rest]=el.dataset.a.split("."); const path=rest.join(".");
+    el.value=get(DATA.inAction[i],path)??"";
+    el.oninput=()=>set(DATA.inAction[i],path,el.value);
+  });
+  box.querySelectorAll("[data-adel]").forEach(b=>b.onclick=()=>{ DATA.inAction.splice(+b.dataset.adel,1); renderAction(); });
+  box.querySelectorAll("[data-afile]").forEach(inp=>inp.onchange=async e=>{
+    const i=+inp.dataset.afile, f=e.target.files[0]; if(!f) return;
+    const path=`assets/action/${slugify(f.name)}`;
+    pending.set(path,{b64:bufToB64(await f.arrayBuffer()),label:f.name});
+    DATA.inAction[i].img=path;
+    box.querySelector(`[data-a="${i}.img"]`).value=path;
+    box.querySelector(`[data-anew="${i}"]`).textContent=`✓ ${f.name} — יעלה בשמירה`;
+  });
+}
+
 /* ---------- voice ---------- */
 function renderVoice(){
   DATA.voice=DATA.voice||{traits:[],pairs:[]};
@@ -464,7 +546,7 @@ function renderImagery(){
 /* ---------- advanced ---------- */
 function renderJSON(){ $("#json-edit").value=JSON.stringify(DATA,null,2); }
 
-function renderAll(){ bindFields(); renderColors(); renderResources(); renderVoice(); renderImagery(); renderJSON(); drawLogo(); }
+function renderAll(){ bindFields(); renderHero(); renderAction(); renderColors(); renderResources(); renderVoice(); renderImagery(); renderJSON(); drawLogo(); }
 
 /* ---------- save ---------- */
 async function saveAll(){
@@ -500,6 +582,7 @@ function drawLogo(){
 
 /* ---------- add buttons ---------- */
 $("#add-color").onclick=()=>{ DATA.colors=DATA.colors||[]; DATA.colors.push({name:{he:"",en:""},hex:"#000000",rgb:"",cmyk:"",role:{he:"",en:""}}); renderColors(); };
+$("#add-act").onclick=()=>{ DATA.inAction=DATA.inAction||[]; DATA.inAction.push({img:"",title:{he:"",en:""},desc:{he:"",en:""}}); renderAction(); };
 $("#add-res").onclick=()=>{ DATA.resources=DATA.resources||[]; DATA.resources.push({cat:{he:"",en:""},title:{he:"",en:""},desc:{he:"",en:""},file:"",ext:""}); renderResources(); };
 $("#add-trait").onclick=()=>{ DATA.voice=DATA.voice||{traits:[],pairs:[]}; DATA.voice.traits.push({name:{he:"",en:""},desc:{he:"",en:""}}); renderVoice(); };
 $("#add-pair").onclick=()=>{ DATA.voice=DATA.voice||{traits:[],pairs:[]}; DATA.voice.pairs.push({say:{he:"",en:""},dont:{he:"",en:""}}); renderVoice(); };

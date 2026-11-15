@@ -7,8 +7,8 @@
     },
     "version": "1.0",
     "updated": {
-      "he": "אוגוסט 2026",
-      "en": "August 2026"
+      "he": "נובמבר 2026",
+      "en": "November 2026"
     }
   },
   "lang": {
@@ -405,12 +405,12 @@
         "en": "Ploni font family"
       },
       "desc": {
-        "he": "6 משקלים (Light–Black) בפורמט OTF, לעברית ולטינית.",
-        "en": "6 weights (Light–Black) in OTF, Hebrew & Latin."
+        "he": "8 משקלים (UltraLight–Black) בפורמט TTF, לעברית ולטינית, כולל קובץ הרישיון.",
+        "en": "8 weights (UltraLight–Black) in TTF, Hebrew & Latin, licence included."
       },
       "file": "assets/resources/Ploni-Fonts.zip",
       "ext": "ZIP",
-      "bytes": 642537
+      "bytes": 757906
     },
     {
       "id": "print",
@@ -468,8 +468,8 @@
     "title": "נכסי מותג · OZ Global B2B",
     "description": "הלוגו, הצבעים, הפונטים והחומרים של OZ Global B2B — לשימוש עובדי החברה.",
     "heroTitle": {
-      "he": "נכסי המותג של <em>OZ</em>.",
-      "en": "The <em>OZ</em> brand kit."
+      "he": "נכסי המותג",
+      "en": "Brand assets"
     },
     "heroLede": {
       "he": "מרכז אחד לכל מה שצוות עוז צריך: לוגו בכל הגרסאות והפורמטים, פלטת הצבעים הרשמית, הפונטים וחומרים להורדה. בוחרים, מורידים, משתמשים.",
@@ -512,8 +512,8 @@
           "en": "Logo"
         },
         "lede": {
-          "he": "לכל רקע יש גרסה משלו. הבחירה לא אסתטית — היא מה ששומר על הלוגו קריא.",
-          "en": "Each background has its own version. The choice isn't aesthetic — it keeps the logo legible."
+          "he": "",
+          "en": ""
         }
       },
       "colors": {
@@ -575,6 +575,16 @@
           "he": "",
           "en": ""
         }
+      },
+      "inAction": {
+        "title": {
+          "he": "המותג בפעולה",
+          "en": "The brand in action"
+        },
+        "lede": {
+          "he": "ככה השפה של OZ נראית באתר — אסטרטגיה, קריאייטיב ודיגיטל.",
+          "en": "How the OZ language looks on our website — strategy, creative and digital."
+        }
       }
     },
     "footContact": {
@@ -585,5 +595,45 @@
       "he": "© 2026 OZ Global B2B · אין לשנות את הנכסים או להשתמש בהם באופן שמרמז על חסות.",
       "en": "© 2026 OZ Global B2B · Assets may not be modified or used to imply endorsement."
     }
-  }
+  },
+  "hero": {
+    "video": "https://ozglobalb2b.com/wp-content/uploads/2024/09/hero_v8-small.mp4",
+    "poster": "assets/hero/hero-poster.jpg",
+    "posterLtr": "assets/hero/hero-poster-ltr.jpg"
+  },
+  "inAction": [
+    {
+      "img": "https://ozglobalb2b.com/wp-content/uploads/2023/04/Strategy_v2-1.gif",
+      "title": {
+        "he": "אסטרטגיה",
+        "en": "Strategy"
+      },
+      "desc": {
+        "he": "בונים אסטרטגיית מותג, שיווק ותוכן סביב המטרות העסקיות.",
+        "en": "Brand, marketing and content strategy built around business goals."
+      }
+    },
+    {
+      "img": "https://ozglobalb2b.com/wp-content/uploads/2023/04/Creative_V2-1.gif",
+      "title": {
+        "he": "קריאייטיב",
+        "en": "Creative"
+      },
+      "desc": {
+        "he": "קונספטים, עיצוב וחומרים שיווקיים שנשענים על מסר ברור.",
+        "en": "Concepts, visual design and marketing materials built on a clear message."
+      }
+    },
+    {
+      "img": "https://ozglobalb2b.com/wp-content/uploads/2023/04/digital_v3-1.gif",
+      "title": {
+        "he": "שיווק דיגיטלי",
+        "en": "Digital marketing"
+      },
+      "desc": {
+        "he": "סושיאל, תוכן, ממומן, ABM ו‑Inbound ב‑HubSpot.",
+        "en": "Social, content, paid, ABM and inbound HubSpot marketing."
+      }
+    }
+  ]
 }
