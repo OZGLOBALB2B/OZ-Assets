@@ -585,6 +585,26 @@
           "he": "ככה השפה של OZ נראית באתר — אסטרטגיה, קריאייטיב ודיגיטל.",
           "en": "How the OZ language looks on our website — strategy, creative and digital."
         }
+      },
+      "mood": {
+        "title": {
+          "he": "תמונות אווירה",
+          "en": "Mood imagery"
+        },
+        "lede": {
+          "he": "תמונות בשפה של OZ — נייבי עמוק, ירוק זוהר ושקיפות. לשימוש במצגות, פוסטים, באנרים ואירועים.",
+          "en": "Images in the OZ language — deep navy, glowing green and transparency. For decks, posts, banners and events."
+        }
+      },
+      "icons": {
+        "title": {
+          "he": "אייקונים",
+          "en": "Icons"
+        },
+        "lede": {
+          "he": "ספריית האייקונים של OZ, מבוססת Lucide. בוחרים צבע, מחפשים ומורידים SVG.",
+          "en": "OZ’s icon library, based on Lucide. Pick a colour, search, download SVG."
+        }
       }
     },
     "footContact": {
@@ -635,5 +655,198 @@
         "en": "Social, content, paid, ABM and inbound HubSpot marketing."
       }
     }
-  ]
+  ],
+  "mood": [
+    {
+      "file": "assets/mood/oz-mood-target.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-target.webp",
+      "title": {
+        "he": "מטרה",
+        "en": "Target"
+      },
+      "w": 2576,
+      "h": 1309,
+      "bytes": 155867,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-unicorn.png",
+      "thumb": "assets/mood/thumbs/oz-mood-unicorn.webp",
+      "title": {
+        "he": "חד־קרן",
+        "en": "Unicorn"
+      },
+      "w": 2378,
+      "h": 1336,
+      "bytes": 3150531,
+      "ext": "PNG"
+    },
+    {
+      "file": "assets/mood/oz-mood-case.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-case.webp",
+      "title": {
+        "he": "מזוודה שקופה",
+        "en": "Glass case"
+      },
+      "w": 1920,
+      "h": 1080,
+      "bytes": 875242,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-digital-book.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-digital-book.webp",
+      "title": {
+        "he": "ספר דיגיטלי",
+        "en": "Digital book"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 601844,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-magic-lamp.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-magic-lamp.webp",
+      "title": {
+        "he": "מנורת קסמים",
+        "en": "Magic lamp"
+      },
+      "w": 2576,
+      "h": 1461,
+      "bytes": 342505,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-devices.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-devices.webp",
+      "title": {
+        "he": "מכשירים דיגיטליים",
+        "en": "Digital devices"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 649287,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-three-screens.png",
+      "thumb": "assets/mood/thumbs/oz-mood-three-screens.webp",
+      "title": {
+        "he": "שלושה מסכים",
+        "en": "Three screens"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 1437788,
+      "ext": "PNG"
+    },
+    {
+      "file": "assets/mood/oz-mood-people-screens.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-people-screens.webp",
+      "title": {
+        "he": "אנשים ומסכים",
+        "en": "People & screens"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 476067,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-exhibition.png",
+      "thumb": "assets/mood/thumbs/oz-mood-exhibition.webp",
+      "title": {
+        "he": "ביתני תערוכה",
+        "en": "Exhibition booths"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 1820518,
+      "ext": "PNG"
+    },
+    {
+      "file": "assets/mood/oz-mood-meeting-room.png",
+      "thumb": "assets/mood/thumbs/oz-mood-meeting-room.webp",
+      "title": {
+        "he": "חדר ישיבות",
+        "en": "Meeting room"
+      },
+      "w": 1456,
+      "h": 816,
+      "bytes": 1769739,
+      "ext": "PNG"
+    },
+    {
+      "file": "assets/mood/oz-mood-neon-office.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-neon-office.webp",
+      "title": {
+        "he": "משרד ניאון",
+        "en": "Neon office"
+      },
+      "w": 2576,
+      "h": 1383,
+      "bytes": 524455,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-bg-waves.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-bg-waves.webp",
+      "title": {
+        "he": "רקע — גלים",
+        "en": "Background — waves"
+      },
+      "w": 2000,
+      "h": 1125,
+      "bytes": 360375,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-bg-arc.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-bg-arc.webp",
+      "title": {
+        "he": "רקע — קשת",
+        "en": "Background — arc"
+      },
+      "w": 2576,
+      "h": 1449,
+      "bytes": 111027,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-bg-ribbons.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-bg-ribbons.webp",
+      "title": {
+        "he": "רקע — סרטים",
+        "en": "Background — ribbons"
+      },
+      "w": 1920,
+      "h": 1080,
+      "bytes": 552608,
+      "ext": "JPG"
+    },
+    {
+      "file": "assets/mood/oz-mood-bg-layers.jpg",
+      "thumb": "assets/mood/thumbs/oz-mood-bg-layers.webp",
+      "title": {
+        "he": "רקע — שכבות",
+        "en": "Background — layers"
+      },
+      "w": 1920,
+      "h": 1080,
+      "bytes": 384775,
+      "ext": "JPG"
+    }
+  ],
+  "icons": {
+    "library": "lucide",
+    "version": "1.66.0",
+    "colors": [
+      "#83D429",
+      "#FFFFFF",
+      "#0F0156"
+    ],
+    "default": "#83D429",
+    "stroke": 2
+  }
 }

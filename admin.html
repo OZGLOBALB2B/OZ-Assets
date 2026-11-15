@@ -83,6 +83,7 @@ code{background:var(--surface);border:1px solid var(--line);border-radius:5px;pa
     <button data-tab="general">כללי</button>
     <button data-tab="colors">צבעים</button>
     <button data-tab="resources">חומרים להורדה</button>
+    <button data-tab="mood">תמונות אווירה</button>
     <button data-tab="action">המותג בפעולה</button>
     <button data-tab="voice">טון דיבור</button>
     <button data-tab="imagery">אימג'רי</button>
@@ -167,6 +168,26 @@ code{background:var(--surface);border:1px solid var(--line);border-radius:5px;pa
       <p class="hint">כל צבע מוצג באתר עם HEX / RGB / CMYK ותפקיד. לחיצה על צבע באתר מעתיקה את ה‑HEX.</p>
       <div id="colors-list"></div>
       <button class="addbtn" id="add-color">+ הוספת צבע</button>
+    </div>
+  </section>
+
+  <!-- MOOD IMAGERY -->
+  <section class="panel" data-panel="mood">
+    <div class="card">
+      <h3>תמונות אווירה</h3>
+      <p class="hint">תמונות להורדה בשפה של המותג. בהעלאה נשמר הקובץ המקורי להורדה, ונוצרת אוטומטית תמונה מוקטנת לתצוגה באתר. הראשונה ברשימה מוצגת גדולה.</p>
+      <div class="row2">
+        <div><label>כותרת הסעיף (עברית)</label><input type="text" data-bind="copy.sections.mood.title.he"></div>
+        <div><label>כותרת הסעיף (אנגלית)</label><input type="text" dir="ltr" data-bind="copy.sections.mood.title.en"></div>
+      </div>
+      <div class="bil">
+        <div><label>שורת הסבר (עברית)</label><textarea data-bind="copy.sections.mood.lede.he"></textarea></div>
+        <div><label>שורת הסבר (אנגלית)</label><textarea dir="ltr" data-bind="copy.sections.mood.lede.en"></textarea></div>
+      </div>
+    </div>
+    <div class="card">
+      <div id="mood-list"></div>
+      <label class="addbtn" style="display:block;text-align:center;cursor:pointer">+ העלאת תמונות חדשות (אפשר כמה בבת אחת)<input type="file" accept="image/*" multiple id="mood-add" hidden></label>
     </div>
   </section>
 
@@ -449,6 +470,57 @@ function renderHero(){
   });
 }
 
+/* ---------- mood imagery ---------- */
+async function makeThumb(file){
+  const url=URL.createObjectURL(file);
+  const img=await new Promise((ok,no)=>{ const i=new Image(); i.onload=()=>ok(i); i.onerror=no; i.src=url; });
+  const sc=Math.min(1,900/Math.max(img.naturalWidth,img.naturalHeight));
+  const cv=document.createElement("canvas"); cv.width=Math.round(img.naturalWidth*sc); cv.height=Math.round(img.naturalHeight*sc);
+  cv.getContext("2d").drawImage(img,0,0,cv.width,cv.height); URL.revokeObjectURL(url);
+  const blob=await new Promise(ok=>cv.toBlob(ok,"image/webp",.8));
+  return {b64:bufToB64(await blob.arrayBuffer()),w:img.naturalWidth,h:img.naturalHeight};
+}
+async function moodFromFile(f,item){
+  const base=slugify(f.name.replace(/\.[^.]+$/,"")), ext=(f.name.split(".").pop()||"jpg").toLowerCase();
+  const file=`assets/mood/${base}.${ext}`, thumb=`assets/mood/thumbs/${base}.webp`;
+  const th=await makeThumb(f);
+  pending.set(file,{b64:bufToB64(await f.arrayBuffer()),label:f.name});
+  pending.set(thumb,{b64:th.b64,label:"thumb "+f.name});
+  Object.assign(item,{file,thumb,w:th.w,h:th.h,bytes:f.size,ext:ext.toUpperCase()});
+  return item;
+}
+function renderMood(){
+  DATA.mood=DATA.mood||[];
+  const box=$("#mood-list");
+  box.innerHTML=DATA.mood.map((x,i)=>`
+  <div class="item">
+    <div style="position:absolute;inset-inline-end:12px;top:12px;display:flex;gap:6px">
+      <button class="btn sm ghost" data-mup="${i}" ${i===0?"disabled":""} title="למעלה">↑</button>
+      <button class="btn sm ghost" data-mdown="${i}" ${i===DATA.mood.length-1?"disabled":""} title="למטה">↓</button>
+      <button class="btn sm danger" data-mdel="${i}">מחיקה</button></div>
+    <div class="filebox" style="margin-top:0;margin-inline-end:170px"><span class="cur">${x.file?x.file.split("/").pop():"אין קובץ"}</span>
+      <span class="cur" style="color:var(--ink3)">${x.w&&x.h?x.w+"×"+x.h:""}</span><span class="new" data-mnew="${i}"></span>
+      <label class="btn sm ghost" style="margin:0;cursor:pointer">החלפת תמונה<input type="file" accept="image/*" data-mfile="${i}" hidden></label></div>
+    <div class="row2">
+      <div><label>שם (עברית)</label><input type="text" data-m="${i}.title.he"></div>
+      <div><label>שם (אנגלית)</label><input type="text" dir="ltr" data-m="${i}.title.en"></div>
+    </div>
+  </div>`).join("");
+  box.querySelectorAll("[data-m]").forEach(el=>{
+    const [i,...rest]=el.dataset.m.split("."); const path=rest.join(".");
+    el.value=get(DATA.mood[i],path)??""; el.oninput=()=>set(DATA.mood[i],path,el.value);
+  });
+  const mv=(i,d)=>{ const a=DATA.mood; [a[i],a[i+d]]=[a[i+d],a[i]]; renderMood(); };
+  box.querySelectorAll("[data-mup]").forEach(b=>b.onclick=()=>mv(+b.dataset.mup,-1));
+  box.querySelectorAll("[data-mdown]").forEach(b=>b.onclick=()=>mv(+b.dataset.mdown,1));
+  box.querySelectorAll("[data-mdel]").forEach(b=>b.onclick=()=>{ DATA.mood.splice(+b.dataset.mdel,1); renderMood(); });
+  box.querySelectorAll("[data-mfile]").forEach(inp=>inp.onchange=async e=>{
+    const i=+inp.dataset.mfile, f=e.target.files[0]; if(!f) return;
+    await moodFromFile(f,DATA.mood[i]); renderMood();
+    box.querySelector(`[data-mnew="${i}"]`).textContent=`✓ ${f.name} — יעלה בשמירה`;
+  });
+}
+
 /* ---------- brand in action ---------- */
 function renderAction(){
   DATA.inAction=DATA.inAction||[];
@@ -546,7 +618,7 @@ function renderImagery(){
 /* ---------- advanced ---------- */
 function renderJSON(){ $("#json-edit").value=JSON.stringify(DATA,null,2); }
 
-function renderAll(){ bindFields(); renderHero(); renderAction(); renderColors(); renderResources(); renderVoice(); renderImagery(); renderJSON(); drawLogo(); }
+function renderAll(){ bindFields(); renderHero(); renderMood(); renderAction(); renderColors(); renderResources(); renderVoice(); renderImagery(); renderJSON(); drawLogo(); }
 
 /* ---------- save ---------- */
 async function saveAll(){
@@ -582,6 +654,12 @@ function drawLogo(){
 
 /* ---------- add buttons ---------- */
 $("#add-color").onclick=()=>{ DATA.colors=DATA.colors||[]; DATA.colors.push({name:{he:"",en:""},hex:"#000000",rgb:"",cmyk:"",role:{he:"",en:""}}); renderColors(); };
+$("#mood-add").onchange=async e=>{
+  DATA.mood=DATA.mood||[];
+  for(const f of e.target.files){ const n=f.name.replace(/\.[^.]+$/,"").replace(/[_-]+/g," ");
+    DATA.mood.push(await moodFromFile(f,{title:{he:n,en:n}})); }
+  e.target.value=""; renderMood(); status(`נוספו תמונות — ייעלו בשמירה`,"ok");
+};
 $("#add-act").onclick=()=>{ DATA.inAction=DATA.inAction||[]; DATA.inAction.push({img:"",title:{he:"",en:""},desc:{he:"",en:""}}); renderAction(); };
 $("#add-res").onclick=()=>{ DATA.resources=DATA.resources||[]; DATA.resources.push({cat:{he:"",en:""},title:{he:"",en:""},desc:{he:"",en:""},file:"",ext:""}); renderResources(); };
 $("#add-trait").onclick=()=>{ DATA.voice=DATA.voice||{traits:[],pairs:[]}; DATA.voice.traits.push({name:{he:"",en:""},desc:{he:"",en:""}}); renderVoice(); };
