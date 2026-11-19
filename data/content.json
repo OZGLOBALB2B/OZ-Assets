@@ -462,6 +462,22 @@
       },
       "ext": "Figma",
       "url": "https://www.figma.com/design/LctyMerRUB9EPy8jkGx58k/Blog-Banners?node-id=4007-2&t=xZwckmNYRQ1XJ31t-1"
+    },
+    {
+      "cat": {
+        "he": "אייקונים",
+        "en": "Icons"
+      },
+      "title": {
+        "he": "",
+        "en": ""
+      },
+      "desc": {
+        "he": "מערכת ליצירת אייקונים",
+        "en": "Icon generate system"
+      },
+      "ext": "Icons system",
+      "url": "https://ozicon.vercel.app/"
     }
   ],
   "copy": {
